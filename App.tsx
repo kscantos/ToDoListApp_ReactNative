@@ -1,118 +1,95 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import SplashScreen from './components/SplashScreen';
+import Lists from './components/Lists';
+import DetailedToDo from './components/DetailedToDo';
+import styles from './components/styles';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+interface ToDoList {
+  id: string;
+  name: string;
+  date: string;
+  description?: string;
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  //what currentscreen
+  const [currentScreen, setCurrentScreen] = useState<
+    'Splash' | 'List' | 'Detail'
+  >('Splash');
+  //detailed
+  const [selectedToDo, setSelectedToDo] = useState<ToDoList | null>(null);
+  const [lists, setLists] = useState<ToDoList[]>([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  // add new
+  const addList = (name: string, description: string) => {
+    const newList: ToDoList = {
+      //genrate
+      id: Math.random().toString(),
+      name,
+      //date n time (w/ issue)
+      date: new Date().toLocaleString(),
+      description,
+    };
+    setLists(prevLists => [...prevLists, newList]);
   };
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+  // delete
+  const deleteList = (id: string) => {
+    setLists(prevLists => prevLists.filter(list => list.id !== id));
+  };
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  // splash timer
+  const handleFinishSplash = () => {
+    setCurrentScreen('List');
+  };
+
+  // detailed view w issue
+  const goDetailed = (todo: ToDoList) => {
+    setSelectedToDo(todo);
+    setCurrentScreen('Detail');
+  };
+
+  // return
+  const returnToLists = () => {
+    setSelectedToDo(null);
+    setCurrentScreen('List');
+  };
+
+  // edited
+  const handleSave = (name: string) => {
+    if (selectedToDo) {
+      //map over n update
+      setLists(prevLists =>
+        prevLists.map(list =>
+          list.id === selectedToDo.id ? { ...list, name } : list,
+        ),
+      );
+      returnToLists();
+    }
+  };
+
+  //for rendering screen
+  return (
+    <View style={styles.container}>
+      {currentScreen === 'Splash' ? (
+        <SplashScreen onFinish={handleFinishSplash} />
+      ) : currentScreen === 'Detail' && selectedToDo ? (
+        <DetailedToDo
+          name={selectedToDo.name}
+          onBack={returnToLists}
+          onSave={handleSave}
+        />
+      ) : (
+        <Lists
+          lists={lists}
+          setLists={setLists}
+          deleteList={deleteList}
+          onItemPress={goDetailed}
+        />
+      )}
+    </View>
+  );
+};
 
 export default App;
