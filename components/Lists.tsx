@@ -4,11 +4,17 @@ import SearchFilter from './SearchFilter';
 import Pagination from './Pagination';
 import styles from './styles';
 
+interface Subtask {
+  id: string;
+  name: string;
+}
+
 interface ToDoList {
   id: string;
   name: string;
   date: string;
   description?: string;
+  subTasks: Subtask[];
 }
 
 interface ListProps {
@@ -58,6 +64,8 @@ const Lists: React.FC<ListProps> = ({
           id: generateUniqueId(),
           name: listName,
           date: currentDate,
+          description:'',
+          subTasks: [],
         };
         setLists(prevLists => [newItem, ...prevLists]);
       }
@@ -74,10 +82,17 @@ const Lists: React.FC<ListProps> = ({
     <View style={styles.listItem}>
       <TouchableOpacity onPress={() => onItemPress(item)}>
         <Text style={styles.listText}>{item.name}</Text>
+        {item.subTasks.length > 0 && (
+          <View>
+            {item.subTasks.map(subTask => (
+              <Text key={subTask.id} style={styles.subTaskText}>
+                - {subTask.name}
+              </Text>
+            ))}
+          </View>
+        )}
       </TouchableOpacity>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => setEditingId(item.id)}></TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={() => deleteList(item.id)}>

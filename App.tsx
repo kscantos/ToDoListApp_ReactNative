@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import SplashScreen from './components/SplashScreen';
 import Lists from './components/Lists';
 import DetailedToDo from './components/DetailedToDo';
+import Subtask from './components/SubTask';
 import styles from './components/styles';
 
 interface ToDoList {
@@ -10,6 +11,7 @@ interface ToDoList {
   name: string;
   date: string;
   description?: string;
+  subTasks: Subtask[];
 }
 
 const App = () => {
@@ -30,6 +32,7 @@ const App = () => {
       //date n time (w/ issue)
       date: new Date().toLocaleString(),
       description,
+      subTasks: [],
     };
     setLists(prevLists => [...prevLists, newList]);
   };
@@ -57,12 +60,12 @@ const App = () => {
   };
 
   // edited
-  const handleSave = (name: string) => {
+  const handleSave = (name: string, subTasks: Subtask[]) => {
     if (selectedToDo) {
       //map over n update
       setLists(prevLists =>
         prevLists.map(list =>
-          list.id === selectedToDo.id ? { ...list, name } : list,
+          list.id === selectedToDo.id ? { ...list, name, subTasks } : list,
         ),
       );
       returnToLists();
@@ -77,6 +80,7 @@ const App = () => {
       ) : currentScreen === 'Detail' && selectedToDo ? (
         <DetailedToDo
           name={selectedToDo.name}
+          subTasks={selectedToDo.subTasks}
           onBack={returnToLists}
           onSave={handleSave}
         />
