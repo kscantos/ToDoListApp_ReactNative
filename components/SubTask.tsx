@@ -25,7 +25,7 @@ const Subtask: React.FC<subTaskProps> = ({ subTasks, setSubTasks }) => {
     if (subtaskName.trim()) {
       if (editingId) {
         const updatedSubTasks = subTasks.map(Subtask =>
-            Subtask.id === editingId
+          Subtask.id === editingId
             ? { ...Subtask, name: subtaskName }
             : Subtask,
         );
@@ -36,7 +36,7 @@ const Subtask: React.FC<subTaskProps> = ({ subTasks, setSubTasks }) => {
           id: generateUniqueId(),
           name: subtaskName,
         };
-        setSubTasks((prevTasks) => [newSubTask, ...prevTasks]);
+        setSubTasks(prevTasks => [newSubTask, ...prevTasks]);
       }
       setSubtaskName('');
     }
@@ -55,6 +55,7 @@ const Subtask: React.FC<subTaskProps> = ({ subTasks, setSubTasks }) => {
     setSubtaskName(name);
   };
 
+  //to sync
   useEffect(() => {
     if (subTasks.length > 0) {
       addOrEditSubtask();

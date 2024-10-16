@@ -30,8 +30,7 @@ const DetailedToDo: React.FC<DetailedToDoProps> = ({
     setEditName(name);
   }, [name]);
 
-
-  //saving the name of what i edited
+  //saving the name of what i edited -- inc subtasks
   const handleSave = () => {
     onSave(editName, subTasks);
     onBack();
@@ -39,7 +38,6 @@ const DetailedToDo: React.FC<DetailedToDoProps> = ({
 
   return (
     <View style={styles.container}>
-      
       <View style={styles.buttonContainer1}>
         <Button title="Save/Edit/Add" onPress={handleSave} />
         <Button title="Cancel" onPress={onBack} />

@@ -64,7 +64,7 @@ const Lists: React.FC<ListProps> = ({
           id: generateUniqueId(),
           name: listName,
           date: currentDate,
-          description:'',
+          description: '',
           subTasks: [],
         };
         setLists(prevLists => [newItem, ...prevLists]);

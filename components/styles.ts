@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer1: {
     flexDirection: 'row',
-    alignItems:'flex-start',
+    alignItems: 'flex-start',
     justifyContent: 'space-evenly',
-    marginLeft:140,
+    marginLeft: 140,
   },
   detailText: {
     fontSize: 18,
