@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 8,
     marginBottom: 5,
+    marginTop: 5,
   },
   listItem: {
     flexDirection: 'row',
@@ -76,6 +77,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
+  buttonContainer1: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-evenly',
+    marginLeft: 140,
+  },
   detailText: {
     fontSize: 18,
   },
@@ -106,6 +113,10 @@ const styles = StyleSheet.create({
     marginRight: 5,
     padding: 10,
     justifyContent: 'center',
+  },
+  subTaskText: {
+    color: 'gray',
+    marginLeft: 10,
   },
 });
 
